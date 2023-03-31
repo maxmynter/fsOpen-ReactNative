@@ -61,7 +61,7 @@ const RepositoryList = () => {
     <FlatList
       data={repositories}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item, index, seperators }) => (
+      renderItem={({ item }) => (
         <RepositoryItem
           key={item.id}
           title={item.fullName}
@@ -71,6 +71,7 @@ const RepositoryList = () => {
           stargazersCount={item.stargazersCount}
           ratingAverage={item.ratingAverage}
           reviewCount={item.reviewCount}
+          avatarURL={item.ownerAvatarUrl}
         />
       )}
     />
