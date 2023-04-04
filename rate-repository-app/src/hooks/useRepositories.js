@@ -4,15 +4,17 @@ import { GET_REPOSITORIES } from "../graphQL/queries";
 
 const useRepositories = () => {
   const [repositories, setRepositories] = useState(null);
-  const { data, loading } = useQuery(GET_REPOSITORIES, {
+  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
   });
 
   const fetchRepositories = () => {
-    if (!loading) {
-      setRepositories(data.repositories);
-    } else {
+    console.log(loading, data, error);
+    if (loading || data === undefined) {
+      console.log("fetch Repositories Error", error);
       setRepositories({ edges: [] });
+    } else {
+      setRepositories(data.repositories);
     }
   };
 
