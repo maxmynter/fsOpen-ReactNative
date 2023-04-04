@@ -3,6 +3,7 @@ import Text from "./Text";
 import { Formik } from "formik";
 import * as yup from "yup";
 import FormikTextInput from "./FormikTextInput";
+import useSignIn from "../hooks/useSignIn";
 import theme from "../theme";
 
 const initialValues = { username: "", password: "" };
@@ -62,9 +63,15 @@ const SignInForm = ({ onSubmit }) => {
 };
 
 const SignIn = () => {
-  const onSubmit = (values) => {
-    console.log("fired On Submit");
-    console.log(values);
+  const [signIn] = useSignIn();
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+    try {
+      const { data } = await signIn({ username, password });
+      console.log(data);
+    } catch (e) {
+      console.log("ERROR", e);
+    }
   };
 
   return (
