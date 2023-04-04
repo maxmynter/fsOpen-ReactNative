@@ -9,7 +9,11 @@ const useRepositories = () => {
   });
 
   const fetchRepositories = () => {
-    setRepositories(data.repositories);
+    if (!loading) {
+      setRepositories(data.repositories);
+    } else {
+      setRepositories({ edges: [] });
+    }
   };
 
   useEffect(() => {
