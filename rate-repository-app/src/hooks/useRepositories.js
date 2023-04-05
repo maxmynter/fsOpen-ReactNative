@@ -11,7 +11,10 @@ const useRepositories = () => {
   const fetchRepositories = () => {
     console.log(loading, data, error);
     if (loading || data === undefined) {
-      console.log("fetch Repositories Error", error);
+      console.log(
+        "fetch Repositories loading or data undefined. Setting data to empty array. Errormessage:",
+        error
+      );
       setRepositories({ edges: [] });
     } else {
       setRepositories(data.repositories);
