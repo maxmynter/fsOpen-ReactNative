@@ -18,3 +18,13 @@ export const GET_REPOSITORIES = gql`
     }
   }
 `;
+
+// Gets information about logged in user. Returns null if not logged in
+export const GET_LOGGED_IN_USER = gql`
+  {
+    me {
+      id
+      username
+    }
+  }
+`;
