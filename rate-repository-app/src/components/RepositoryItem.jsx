@@ -86,7 +86,7 @@ const RepositoryItem = ({
   avatarURL,
 }) => {
   return (
-    <View style={styles.viewParent}>
+    <View style={styles.viewParent} testID="repositoryItem">
       <View style={styles.header}>
         <Image style={styles.tinyLogo} source={{ uri: avatarURL }} />
         <View style={styles.titleDescription}>
