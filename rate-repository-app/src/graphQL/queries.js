@@ -1,20 +1,24 @@
 import { gql } from "@apollo/client";
+import { REPOSITORY_DETAILS_FRAGMENT } from "./fragments";
 
 export const GET_REPOSITORIES = gql`
+  ${REPOSITORY_DETAILS_FRAGMENT}
   query Query {
     repositories {
       edges {
         node {
-          ownerAvatarUrl
-          ratingAverage
-          reviewCount
-          stargazersCount
-          description
-          fullName
-          forksCount
-          language
+          ...repositoryDetailFragment
         }
       }
+    }
+  }
+`;
+
+export const GET_REPOSITORY_DETAIL = gql`
+  ${REPOSITORY_DETAILS_FRAGMENT}
+  query Repositories($repositoryId: ID!) {
+    repository(id: $repositoryId) {
+      ...repositoryDetailFragment
     }
   }
 `;
