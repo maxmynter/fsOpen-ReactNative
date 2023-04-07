@@ -67,7 +67,7 @@ const ReviewItem = ({ reviewItem }) => {
 };
 
 const RepositoryReviews = (repoID) => {
-  const { repositoryReviews, loading: loadingReviews } =
+  const { repositoryReviews } =
     useRepositoryReviews(repoID);
   return (
     <FlatList
