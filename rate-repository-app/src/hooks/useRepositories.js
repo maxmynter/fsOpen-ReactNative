@@ -1,30 +1,18 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
 import { GET_REPOSITORIES } from "../graphQL/queries";
+import generateGraphQLHook from "../utils/fetchGraphQLHook";
 
 const useRepositories = () => {
-  const [repositories, setRepositories] = useState(null);
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: "cache-and-network",
+  const { resource, loading, refetch } = generateGraphQLHook({
+    graphQLQuery: GET_REPOSITORIES,
+    queryVariables: {},
   });
-
-  const fetchRepositories = () => {
-    if (loading || data === undefined) {
-      console.log(
-        "fetch Repositories loading or data undefined. Setting data to empty array. Errormessage:",
-        error
-      );
-      setRepositories({ edges: [] });
-    } else {
-      setRepositories(data.repositories);
-    }
+  const ReturnValueFornoDataAvailable = { edges: [] };
+  return {
+    repositories:
+      resource != null ? resource.repositories : ReturnValueFornoDataAvailable,
+    loading,
+    refetch,
   };
-
-  useEffect(() => {
-    fetchRepositories();
-  }, [loading]);
-
-  return { repositories, loading, refetch: fetchRepositories };
 };
 
 export default useRepositories;

@@ -1,25 +1,18 @@
-import { useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import generateGraphQLHook from "../utils/fetchGraphQLHook";
 import { GET_REPOSITORY_DETAIL } from "../graphQL/queries";
 
 const useRepositoryDetails = (repoID) => {
-  const [repositoryDetails, setRepositoryDetails] = useState(null);
-  const { data, loading, error } = useQuery(GET_REPOSITORY_DETAIL, {
-    variables: { repositoryId: repoID },
-    fetchPolicy: "cache-and-network",
+  const { resource, loading, refetch } = generateGraphQLHook({
+    graphQLQuery: GET_REPOSITORY_DETAIL,
+    queryVariables: { repositoryId: repoID },
   });
-  const fetchRepositoryDetails = () => {
-    if (loading && !data) {
-      setRepositoryDetails(null);
-      console.log("Request Loading or error. Error:", error);
-    } else {
-      setRepositoryDetails(data.repository);
-    }
+  const ReturnValueFornoDataAvailable = null;
+  return {
+    repositoryDetails:
+      resource != null ? resource.repository : ReturnValueFornoDataAvailable,
+    loading,
+    refetch,
   };
-  useEffect(() => {
-    fetchRepositoryDetails();
-  }, [loading]);
-  return { repositoryDetails, loading, refetch: fetchRepositoryDetails };
 };
 
 export default useRepositoryDetails;
