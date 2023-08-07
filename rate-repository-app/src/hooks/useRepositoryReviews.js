@@ -9,7 +9,7 @@ const useRepositoryReviews = ({ repoID }) => {
   const ReturnValueFornoDataAvailable = { edges: [] };
   return {
     repositoryReviews:
-      resource != null
+      resource !== null && resource.repository != null
         ? resource.repository.reviews.edges
         : ReturnValueFornoDataAvailable,
     loading,
