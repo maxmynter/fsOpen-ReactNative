@@ -1,30 +1,13 @@
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { useNavigate } from "react-router-native";
 import { Formik } from "formik";
 import * as yup from "yup";
 import FormikTextInput from "./FormikTextInput";
 import SubmitButton from "./SubmitButton";
 import useSignIn from "../hooks/useSignIn";
-import theme from "../theme";
+import { formStyles } from "../styles/formStyles";
 
 const initialValues = { username: "", password: "" };
-
-const styles = StyleSheet.create({
-  formContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    backgroundColor: "white",
-    paddingBottom: 5,
-  },
-  formTextField: {
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 8,
-    padding: 16,
-    fontFamily: theme.fonts.main,
-  },
-});
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username required"),
@@ -33,14 +16,14 @@ const validationSchema = yup.object().shape({
 
 export const SignInForm = ({ onSubmit }) => {
   return (
-    <View style={styles.formContainer}>
+    <View style={formStyles.formContainer}>
       <FormikTextInput
-        style={styles.formTextField}
+        style={formStyles.formTextField}
         name="username"
         placeholder="Username"
       />
       <FormikTextInput
-        style={styles.formTextField}
+        style={formStyles.formTextField}
         name="password"
         placeholder="Password"
       />
