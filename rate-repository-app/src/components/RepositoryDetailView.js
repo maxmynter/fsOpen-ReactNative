@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const ReviewItem = ({ reviewItem }) => {
-  console.log("REVIEITEM", reviewItem);
   const rating = reviewItem.rating;
   const author = reviewItem.user.username;
   const review = reviewItem.text;
@@ -67,8 +66,7 @@ const ReviewItem = ({ reviewItem }) => {
 };
 
 const RepositoryReviews = (repoID) => {
-  const { repositoryReviews } =
-    useRepositoryReviews(repoID);
+  const { repositoryReviews } = useRepositoryReviews(repoID);
   return (
     <FlatList
       data={repositoryReviews}
@@ -83,7 +81,6 @@ const RepositoryDetailView = () => {
   const { repoID } = useParams();
   const { repositoryDetails, loading: loadingDetails } =
     useRepositoryDetails(repoID);
-
   return (
     <>
       <View style={{ backgroundColor: "white" }}>
