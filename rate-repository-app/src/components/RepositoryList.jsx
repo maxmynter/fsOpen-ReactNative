@@ -49,7 +49,6 @@ export const RepositoryListContainer = ({ repositories }) => {
 
 const RepositoryList = () => {
   const { repositories } = useRepositories();
-  console.log(repositories);
   return <RepositoryListContainer repositories={repositories} />;
 };
 
