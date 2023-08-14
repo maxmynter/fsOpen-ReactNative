@@ -25,10 +25,23 @@ export const GET_REPOSITORY_DETAIL = gql`
 
 // Gets information about logged in user. Returns null if not logged in
 export const GET_LOGGED_IN_USER = gql`
-  {
+  query getCurrentUser($includeReviews: Boolean = false) {
     me {
       id
       username
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            createdAt
+            rating
+            repository {
+              fullName
+              name
+            }
+            text
+          }
+        }
+      }
     }
   }
 `;
