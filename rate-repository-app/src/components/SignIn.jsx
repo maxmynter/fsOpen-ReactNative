@@ -7,11 +7,11 @@ import SubmitButton from "./SubmitButton";
 import useSignIn from "../hooks/useSignIn";
 import { formStyles } from "../styles/formStyles";
 
-const initialValues = { username: "", password: "" };
+const initialValues = { Username: "", Password: "" };
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required("Username required"),
-  password: yup.string().required("Password required"),
+  Username: yup.string().required("Username required"),
+  Password: yup.string().required("Password required"),
 });
 
 export const SignInForm = ({ onSubmit }) => {
@@ -19,13 +19,14 @@ export const SignInForm = ({ onSubmit }) => {
     <View style={formStyles.formContainer}>
       <FormikTextInput
         style={formStyles.formTextField}
-        name="username"
+        name="Username"
         placeholder="Username"
       />
       <FormikTextInput
         style={formStyles.formTextField}
-        name="password"
+        name="Password"
         placeholder="Password"
+        secureTextEntry={true}
       />
       <SubmitButton text="Sign In" onClick={onSubmit} />
     </View>
@@ -48,9 +49,9 @@ const SignIn = () => {
   const [signIn] = useSignIn();
   const navigate = useNavigate();
   const onSubmit = async (values) => {
-    const { username, password } = values;
+    const { Username, Password } = values;
     try {
-      const { data } = await signIn({ username, password });
+      const { data } = await signIn({ username: Username, password: Password });
       console.log("Logged In", data);
       navigate("/");
     } catch (e) {
