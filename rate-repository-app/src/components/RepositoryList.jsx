@@ -8,11 +8,9 @@ import useRepositories from "../hooks/useRepositories";
 import { useState } from "react";
 import TextInput from "./TextInput";
 import { formStyles } from "../styles/formStyles";
+import FlatListItemSeparator from "./FlatListItemSeperator";
 
 const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-  },
   listHeaderPickerHeader: {
     height: 20,
     display: "flex",
@@ -31,8 +29,6 @@ const styles = StyleSheet.create({
   pickerStyle: { paddingTop: 3 },
   headerStyle: { backgroundColor: "white" },
 });
-
-const ItemSeparator = () => <View style={styles.separator} />;
 
 const ListHeader = ({
   selectedOrdering,
@@ -124,7 +120,7 @@ export const RepositoryListContainer = ({
   return (
     <FlatList
       data={sortedData()}
-      ItemSeparatorComponent={ItemSeparator}
+      ItemSeparatorComponent={FlatListItemSeparator}
       ListHeaderComponent={
         <ListHeader
           selectedOrdering={selectedOrdering}

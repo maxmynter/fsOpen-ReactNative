@@ -45,6 +45,7 @@ const AppBar = () => {
         {data && data.me ? (
           <>
             <AppBarLink text="Create Review" linkTo="/createReview" />
+            <AppBarLink text="My Reviews" linkTo="/myReviews" />
             <AppBarLink text="Sign Out" linkTo="/signIn" onPress={signOut} />
           </>
         ) : (
