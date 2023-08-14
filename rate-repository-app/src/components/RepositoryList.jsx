@@ -6,6 +6,8 @@ import Text from "./Text";
 
 import useRepositories from "../hooks/useRepositories";
 import { useState } from "react";
+import TextInput from "./TextInput";
+import { formStyles } from "../styles/formStyles";
 
 const styles = StyleSheet.create({
   separator: {
@@ -27,6 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   pickerStyle: { paddingTop: 3 },
+  headerStyle: { backgroundColor: "white" },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
@@ -35,6 +38,8 @@ const ListHeader = ({
   selectedOrdering,
   setSelectedOrdering,
   sortingOptions,
+  searchFieldValue,
+  setSearchFieldValue,
 }) => {
   const [open, setOpen] = useState(false);
   const onChangeOrdering = (itemValue) => {
@@ -45,7 +50,13 @@ const ListHeader = ({
     setOpen(false);
   };
   return (
-    <View>
+    <View styles={styles.headerStyle}>
+      <TextInput
+        style={formStyles.formTextField}
+        value={searchFieldValue}
+        onChangeText={(text) => setSearchFieldValue(text)}
+        placeholder="Search ..."
+      />
       {open ? (
         <View>
           <View style={styles.listHeaderPickerHeader}>
@@ -78,7 +89,11 @@ const ListHeader = ({
   );
 };
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({
+  searchFieldValue,
+  setSearchFieldValue,
+  repositories,
+}) => {
   const sortingOptions = [
     { label: "Latest", value: "latest" },
     { label: "Rating Increasing", value: "rating-lth" },
@@ -115,6 +130,8 @@ export const RepositoryListContainer = ({ repositories }) => {
           selectedOrdering={selectedOrdering}
           setSelectedOrdering={setSelectedOrdering}
           sortingOptions={sortingOptions}
+          searchFieldValue={searchFieldValue}
+          setSearchFieldValue={setSearchFieldValue}
         />
       }
       renderItem={({ item }) => (
@@ -142,8 +159,15 @@ export const RepositoryListContainer = ({ repositories }) => {
 };
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
-  return <RepositoryListContainer repositories={repositories} />;
+  const [searchFieldValue, setSearchFieldValue] = useState("");
+  const { repositories } = useRepositories(searchFieldValue);
+  return (
+    <RepositoryListContainer
+      repositories={repositories}
+      searchFieldValue={searchFieldValue}
+      setSearchFieldValue={setSearchFieldValue}
+    />
+  );
 };
 
 export default RepositoryList;

@@ -1,10 +1,11 @@
 import { GET_REPOSITORIES } from "../graphQL/queries";
 import generateGraphQLHook from "../utils/fetchGraphQLHook";
 
-const useRepositories = () => {
+const useRepositories = (searchKeyword) => {
+  const queryVariables = { searchKeyword: searchKeyword ? searchKeyword : "" };
   const { resource, loading, refetch } = generateGraphQLHook({
     graphQLQuery: GET_REPOSITORIES,
-    queryVariables: {},
+    queryVariables,
   });
   const ReturnValueFornoDataAvailable = { edges: [] };
   return {
