@@ -1,17 +1,24 @@
-import { Dimensions, FlatList, View } from "react-native";
+import { Alert, Dimensions, FlatList, Pressable, View } from "react-native";
 import FlatListItemSeparator from "./FlatListItemSeperator";
 import { useQuery } from "@apollo/client";
 import { GET_LOGGED_IN_USER } from "../graphQL/queries";
 import Text from "./Text";
 import { StyleSheet } from "react-native";
 import theme from "../theme";
+import { useNavigate } from "react-router-native";
+import useDeleteReview from "../hooks/useDeleteReview";
 
 const styles = StyleSheet.create({
   reviewItemContainer: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     padding: 15,
     backgroundColor: "white",
+    justifyContent: "flex-start",
+  },
+  reviewItemInfoContainer: {
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "flex-start",
   },
 
@@ -57,9 +64,65 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     width: Dimensions.get("window").width / 1.25,
   },
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    paddingTop: 10,
+    justifyContent: "space-between",
+  },
+  reviewItemButton: {
+    borderRadius: 2,
+    margin: 25,
+    padding: 10,
+    backgroundColor: "blue",
+  },
+  reviewItemButtonText: {
+    fontWeight: theme.fontWeights.bold,
+    color: "white",
+    padding: 3,
+  },
 });
 
-const ReviewItem = ({ createdAt, rating, repository, text }) => {
+const ReviewItemButton = ({ text, backgroundColor, onPress }) => {
+  return (
+    <Pressable onPress={onPress}>
+      <View style={{ ...styles.reviewItemButton, backgroundColor }}>
+        <Text style={styles.reviewItemButtonText}>{text}</Text>
+      </View>
+    </Pressable>
+  );
+};
+
+const ReviewItem = ({
+  createdAt,
+  rating,
+  repository,
+  text,
+  reviewId,
+  refetchReviews,
+}) => {
+  const navigate = useNavigate();
+  const [deleteReview] = useDeleteReview();
+  const handleOnPressViewRepository = () => {
+    console.log("Navigate To", repository.id);
+    navigate(`/${repository.id}`);
+  };
+  const handleOnDeleteReview = () => {
+    Alert.alert("Delete Review?", "This cannot be undone", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          deleteReview(reviewId);
+          refetchReviews();
+        },
+      },
+    ]);
+  };
   const formattedDate = () => {
     return new Date(createdAt).toLocaleString("en-GB", {
       day: "2-digit",
@@ -69,20 +132,34 @@ const ReviewItem = ({ createdAt, rating, repository, text }) => {
   };
   return (
     <View style={styles.reviewItemContainer}>
-      <View style={styles.ratingContainer}>
-        <Text style={styles.ratingText}>{rating}</Text>
+      <View style={styles.reviewItemInfoContainer}>
+        <View style={styles.ratingContainer}>
+          <Text style={styles.ratingText}>{rating}</Text>
+        </View>
+        <View styles={styles.copyContainer}>
+          <Text style={styles.repoName}>{repository.fullName}</Text>
+          <Text style={styles.createdAtText}>{formattedDate()}</Text>
+          <Text style={styles.reviewText}>{text}</Text>
+        </View>
       </View>
-      <View styles={styles.copyContainer}>
-        <Text style={styles.repoName}>{repository.fullName}</Text>
-        <Text style={styles.createdAtText}>{formattedDate()}</Text>
-        <Text style={styles.reviewText}>{text}</Text>
+      <View style={styles.buttonContainer}>
+        <ReviewItemButton
+          text={"View Repository"}
+          backgroundColor="blue"
+          onPress={handleOnPressViewRepository}
+        />
+        <ReviewItemButton
+          text={"Delete"}
+          backgroundColor="red"
+          onPress={handleOnDeleteReview}
+        />
       </View>
     </View>
   );
 };
 
 const MyReviews = () => {
-  const { loading, data } = useQuery(GET_LOGGED_IN_USER, {
+  const { loading, data, refetch } = useQuery(GET_LOGGED_IN_USER, {
     variables: { includeReviews: true },
   });
   return (
@@ -96,6 +173,8 @@ const MyReviews = () => {
           renderItem={({ item }) => {
             return (
               <ReviewItem
+                refetchReviews={refetch}
+                reviewId={item.id}
                 createdAt={item.createdAt}
                 rating={item.rating}
                 repository={item.repository}

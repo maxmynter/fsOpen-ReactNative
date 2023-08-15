@@ -35,10 +35,12 @@ export const GET_LOGGED_IN_USER = gql`
             createdAt
             rating
             repository {
+              id
               fullName
               name
             }
             text
+            id
           }
         }
       }

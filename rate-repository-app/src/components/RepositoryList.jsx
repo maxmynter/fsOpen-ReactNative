@@ -134,7 +134,7 @@ export const RepositoryListContainer = ({
         <Pressable
           onPress={() => {
             console.log("Navigate To", item.id);
-            navigate(`${item.id}`);
+            navigate(`/${item.id}`);
           }}
         >
           <RepositoryItem

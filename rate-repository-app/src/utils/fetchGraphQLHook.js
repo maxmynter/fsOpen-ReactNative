@@ -10,7 +10,7 @@ const generateGraphQLHook = ({ graphQLQuery, queryVariables }) => {
 
   const fetchResource = () => {
     if (loading) {
-      console.log("Loading");
+      console.log("Loading Resource");
     } else {
       if (data === undefined) {
         console.log(`Could not fetch resource. Error message:`, error);
