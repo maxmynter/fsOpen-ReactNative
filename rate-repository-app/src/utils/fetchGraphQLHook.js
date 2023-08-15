@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 
 const generateGraphQLHook = ({ graphQLQuery, queryVariables }) => {
   const [resource, setResource] = useState(null);
-  const { data, error, loading } = useQuery(graphQLQuery, {
+  const { data, error, loading, fetchMore } = useQuery(graphQLQuery, {
     variables: queryVariables,
     fetchPolicy: "cache-and-network",
   });
@@ -24,7 +24,7 @@ const generateGraphQLHook = ({ graphQLQuery, queryVariables }) => {
     fetchResource();
   }, [loading]);
 
-  return { resource, loading, refetch: fetchResource };
+  return { resource, loading, refetch: fetchResource, fetchMore };
 };
 
 export default generateGraphQLHook;

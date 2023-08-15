@@ -3,12 +3,17 @@ import { REPOSITORY_DETAILS_FRAGMENT } from "./fragments";
 
 export const GET_REPOSITORIES = gql`
   ${REPOSITORY_DETAILS_FRAGMENT}
-  query Query($searchKeyword: String) {
-    repositories(searchKeyword: $searchKeyword) {
+  query Query($searchKeyword: String, $first: Int = 8, $after: String) {
+    repositories(searchKeyword: $searchKeyword, first: $first, after: $after) {
       edges {
         node {
           ...repositoryDetailFragment
         }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }

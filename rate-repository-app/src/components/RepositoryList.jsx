@@ -89,6 +89,7 @@ export const RepositoryListContainer = ({
   searchFieldValue,
   setSearchFieldValue,
   repositories,
+  onEndReach,
 }) => {
   const sortingOptions = [
     { label: "Latest", value: "latest" },
@@ -121,6 +122,8 @@ export const RepositoryListContainer = ({
     <FlatList
       data={sortedData()}
       ItemSeparatorComponent={FlatListItemSeparator}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       ListHeaderComponent={
         <ListHeader
           selectedOrdering={selectedOrdering}
@@ -156,12 +159,21 @@ export const RepositoryListContainer = ({
 
 const RepositoryList = () => {
   const [searchFieldValue, setSearchFieldValue] = useState("");
-  const { repositories } = useRepositories(searchFieldValue);
+  const refetchStep = 8;
+  const { repositories, fetchMore } = useRepositories({
+    searchKeyword: searchFieldValue,
+    first: refetchStep,
+  });
   return (
     <RepositoryListContainer
       repositories={repositories}
       searchFieldValue={searchFieldValue}
       setSearchFieldValue={setSearchFieldValue}
+      onEndReachedThreshold={0.5}
+      onEndReach={() => {
+        console.log("Fetching More");
+        fetchMore({ first: refetchStep, searchKeyword: searchFieldValue });
+      }}
     />
   );
 };
