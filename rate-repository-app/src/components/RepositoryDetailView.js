@@ -65,13 +65,19 @@ const ReviewItem = ({ reviewItem }) => {
   );
 };
 
-const RepositoryReviews = (repoID) => {
-  const { repositoryReviews } = useRepositoryReviews(repoID);
+const RepositoryReviews = ({ repoID }) => {
+  const repoFetchQuery = {
+    repositoryId: repoID,
+    first: 4,
+  };
+  const { repositoryReviews, fetchMore } = useRepositoryReviews(repoFetchQuery);
   return (
     <FlatList
       data={repositoryReviews}
       renderItem={({ item }) => <ReviewItem reviewItem={item.node} />}
       keyExtractor={({ node: { id } }) => id}
+      onEndReached={() => fetchMore(repoFetchQuery)}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparator}
     />
   );

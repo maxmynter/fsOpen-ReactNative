@@ -9,7 +9,10 @@ const httpLink = createHttpLink({
 });
 
 const cache = new InMemoryCache({
-  typePolicies: { Query: { fields: { repositories: relayStylePagination() } } },
+  typePolicies: {
+    Query: { fields: { repositories: relayStylePagination() } },
+    Repository: { fields: { reviews: relayStylePagination() } },
+  },
 });
 
 const createApolloClient = (authStorage) => {

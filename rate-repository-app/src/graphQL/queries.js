@@ -54,11 +54,11 @@ export const GET_LOGGED_IN_USER = gql`
 `;
 
 export const GET_REPOSITORY_REVIEWS = gql`
-  query reviews($repositoryId: ID!) {
+  query reviews($repositoryId: ID!, $first: Int, $after: String) {
     repository(id: $repositoryId) {
       id
       fullName
-      reviews {
+      reviews(first: $first, after: $after) {
         edges {
           node {
             id
@@ -70,6 +70,11 @@ export const GET_REPOSITORY_REVIEWS = gql`
               username
             }
           }
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
         }
       }
     }
