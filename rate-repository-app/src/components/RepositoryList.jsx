@@ -98,23 +98,15 @@ export const RepositoryListContainer = ({
   ];
   const [selectedOrdering, setSelectedOrdering] = useState(sortingOptions[0]);
   const navigate = useNavigate();
-  // Get the nodes from the edges array
-  const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node)
-    : [];
 
   const sortedData = () => {
     switch (selectedOrdering.value) {
       case "latest":
-        return repositoryNodes;
+        return repositories;
       case "rating-lth":
-        return repositoryNodes.sort(
-          (a, b) => a.ratingAverage - b.ratingAverage
-        );
+        return repositories.sort((a, b) => a.ratingAverage - b.ratingAverage);
       case "rating-htl":
-        return repositoryNodes.sort(
-          (a, b) => b.ratingAverage - a.ratingAverage
-        );
+        return repositories.sort((a, b) => b.ratingAverage - a.ratingAverage);
     }
   };
 
@@ -160,19 +152,25 @@ export const RepositoryListContainer = ({
 const RepositoryList = () => {
   const [searchFieldValue, setSearchFieldValue] = useState("");
   const refetchStep = 8;
-  const { repositories, fetchMore } = useRepositories({
+  let { repositories, fetchMore } = useRepositories({
     searchKeyword: searchFieldValue,
     first: refetchStep,
   });
+
   return (
     <RepositoryListContainer
-      repositories={repositories}
+      repositories={
+        repositories ? repositories.edges.map((edge) => edge.node) : []
+      }
       searchFieldValue={searchFieldValue}
       setSearchFieldValue={setSearchFieldValue}
       onEndReachedThreshold={0.5}
       onEndReach={() => {
         console.log("Fetching More");
-        fetchMore({ first: refetchStep, searchKeyword: searchFieldValue });
+        fetchMore({
+          first: refetchStep,
+          searchKeyword: searchFieldValue,
+        });
       }}
     />
   );

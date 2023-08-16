@@ -14,10 +14,6 @@ const useRepositories = (queryVariables) => {
     if (!canFetchMore) {
       return;
     }
-    console.log(
-      "🚀 ~ file: useRepositories.js:27 ~ handleFetchMore ~ queryVariables:",
-      queryVariables
-    );
 
     fetchMore({
       variables: {
@@ -26,6 +22,7 @@ const useRepositories = (queryVariables) => {
       },
     });
   };
+
   const ReturnValueFornoDataAvailable = { edges: [] };
 
   return {

@@ -6,6 +6,7 @@ const generateGraphQLHook = ({ graphQLQuery, queryVariables }) => {
   const { data, error, loading, fetchMore } = useQuery(graphQLQuery, {
     variables: queryVariables,
     fetchPolicy: "cache-and-network",
+    notifyOnNetworkStatusChange: true,
   });
 
   const fetchResource = () => {
